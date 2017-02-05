@@ -32,7 +32,20 @@ log.txt
 bin
 obj
 packages
-node_modules
 
 # TestResults
 TestResults
+
+# dependencies
+node_modules
+
+# testing
+coverage
+
+# production
+build
+
+# misc
+.DS_Store
+.env
+npm-debug.log
