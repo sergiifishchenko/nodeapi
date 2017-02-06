@@ -1,0 +1,51 @@
+# OS
+# ===========
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# General
+# =======
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+*.tmp
+*.bak
+*.swp
+logs/
+build/
+log.txt
+
+# Visual Studio
+# =========
+*.suo
+*.ntvs*
+*.njsproj
+*.user
+.vs
+
+# Backend
+bin
+obj
+packages
+
+# TestResults
+TestResults
+
+# dependencies
+node_modules/
+
+# testing
+coverage
+
+# production
+build
+
+# misc
+.DS_Store
+.env
+npm-debug.log
