@@ -1,11 +1,13 @@
-var express = require('express');
-var path = require('path');
-var app = express();
-var bodyParser = require('body-parser');
-var methodOverride = require('method-override');
-var morgan = require('morgan');
-var favicon = require('serve-favicon');
-var log  = require('./libs/logger')(module);
+var express         = require('express');
+var path            = require('path');
+var app             = express();
+var bodyParser      = require('body-parser');
+var methodOverride  = require('method-override');
+var morgan          = require('morgan');
+var favicon         = require('serve-favicon');
+var log             = require('./libs/logger')(module);
+var config          = require('./libs/config');
+var ArticleModel    = require('./libs/mongoose').ArticleModel;
 
 
 app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -30,7 +32,57 @@ app.get('/',function(req,res){
      res.sendFile('index.html');
 });
 
-app.listen(1337, function(){
+app.get('/api/articles', function(req, res) {
+    return ArticleModel.find(function (err, articles) {
+        if (!err) {
+            return res.send(articles);
+        } else {
+            res.statusCode = 500;
+            log.error('Internal error(%d): %s',res.statusCode,err.message);
+            return res.send({ error: 'Server error' });
+        }
+    });
+});
+
+app.post('/api/articles', function(req, res) {
+    var article = new ArticleModel({
+        title: req.body.title,
+        author: req.body.author,
+        description: req.body.description,
+        images: req.body.images
+    });
+
+    article.save(function (err) {
+        if (!err) {
+            log.info("article created");
+            return res.send({ status: 'OK', article:article });
+        } else {
+            console.log(err);
+            if(err.name == 'ValidationError') {
+                res.statusCode = 400;
+                res.send({ error: 'Validation error' });
+            } else {
+                res.statusCode = 500;
+                res.send({ error: 'Server error' });
+            }
+            log.error('Internal error(%d): %s',res.statusCode,err.message);
+        }
+    });
+});
+
+app.get('/api/articles/:id', function(req, res) {
+    res.send('This is not implemented now');
+});
+
+app.put('/api/articles/:id', function (req, res){
+    res.send('This is not implemented now');    
+});
+
+app.delete('/api/articles/:id', function (req, res){
+    res.send('This is not implemented now');
+});
+
+app.listen(config.get('port'), function(){
     console.log('Express server listening on port 1337');
 });
 
